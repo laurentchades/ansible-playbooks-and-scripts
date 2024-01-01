@@ -1,9 +1,16 @@
 ---
 - hosts: all
-
+  gather_facts: yes
   become: true
+  
   tasks:
     - name: update apt packages
       apt:
         upgrade: yes
         update_cache: yes
+
+    - name: Check if a reboot is required.
+      ansible.builtin.stat:
+        path: /var/run/reboot-required
+        get_checksum: no
+      register: reboot_required_file
